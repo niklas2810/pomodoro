@@ -13,8 +13,8 @@ let interval = 0;
 
 const audio = new Audio('tic-tac.mp3');
 
-const pauseSeconds = 5*60;
-const focusSeconds = 25*60;
+const pauseSeconds = 5 * 60;
+const focusSeconds = 25 * 60;
 
 const playEmoji = '▶️';
 const pauseEmoji = '⏸️';
@@ -28,7 +28,7 @@ const internal_time = ref(0);
 const display_time = ref('');
 
 const playSound = () => {
-    audio.play(); 
+    audio.play();
 }
 
 const reset = () => {
@@ -53,7 +53,7 @@ const onTimer = () => {
     }
 
     const willPause = isFocus.value;
-    
+
     internal_time.value = willPause ? pauseSeconds : focusSeconds;
     isFocus.value = !isFocus.value;
     playSound();
@@ -81,18 +81,29 @@ const contextEmoji = computed(() => {
 });
 
 const contextShort = computed(() => {
-    if(!playing.value)
+    if (!playing.value)
         return 'Pause';
-    
+
     return isFocus.value ? 'Focus' : 'Rest';
 });
 
 const contextText = computed(() => {
-    if(!playing.value)
+    if (!playing.value)
         return 'Paused';
-    
+
     return isFocus.value ? 'It\'s time to focus!' : 'Take a rest!';
 });
+
+const progressPercent = computed(() => {
+    const current = internal_time.value;
+    const goal = isFocus.value ? focusSeconds : pauseSeconds;
+
+    return 100 * (current / goal);
+});
+
+const timeFormatter = () => {
+    return display_time.value;
+}
 
 watch(playing, (newValue, oldValue) => {
     if (newValue === oldValue)
@@ -116,7 +127,10 @@ reset();
 
 <template>
     <h3 class="context-text">{{ contextText }}</h3>
-    <h1>{{ display_time }}</h1>
+    <ve-progress :progress="progressPercent" :legendFormatter="timeFormatter" legendClass="legend-class" color="#42B883"
+        emptyThickness="0">
+    </ve-progress>
+    <h5>Controls</h5>
     <button @click="toggleTimer">{{ contextEmoji }}</button>
     <button @click="reset">{{ stopEmoji }}</button>
 </template>
