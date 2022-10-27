@@ -122,6 +122,7 @@ watch(internal_time, (newValue, oldValue) => {
 });
 
 reset();
+window.addEventListener('beforeunload', (event) => { event.preventDefault(); });
 
 </script>
 
