@@ -13,8 +13,8 @@ let interval = 0;
 
 const audio = new Audio('tic-tac.mp3');
 
-const pauseSeconds = 5;
-const focusSeconds = 5;
+const pauseSeconds = 5*60;
+const focusSeconds = 25*60;
 
 const playEmoji = '▶️';
 const pauseEmoji = '⏸️';
@@ -37,8 +37,13 @@ const reset = () => {
     internal_time.value = focusSeconds;
 }
 
+const setDocumentTitle = () => {
+    document.title = `${display_time.value} [${contextShort.value.toUpperCase()}] | Pomodoro Tracker`;
+};
+
 const toggleTimer = () => {
     playing.value = !playing.value;
+    setDocumentTitle();
 };
 
 const onTimer = () => {
@@ -75,6 +80,13 @@ const contextEmoji = computed(() => {
     return playing.value ? pauseEmoji : playEmoji;
 });
 
+const contextShort = computed(() => {
+    if(!playing.value)
+        return 'Pause';
+    
+    return isFocus.value ? 'Focus' : 'Rest';
+});
+
 const contextText = computed(() => {
     if(!playing.value)
         return 'Paused';
@@ -95,7 +107,7 @@ watch(playing, (newValue, oldValue) => {
 watch(internal_time, (newValue, oldValue) => {
     const display = buildTime(newValue);
     display_time.value = display;
-    document.title = display + ' | Pomodoro Tracker';
+    setDocumentTitle();
 });
 
 reset();
