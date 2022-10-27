@@ -18,7 +18,6 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    - run: npm test
     - name: Copy public assets
       run: cp public/* dist
     - name: Deploy
