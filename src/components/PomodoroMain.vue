@@ -15,8 +15,8 @@ let interval = 0;
 
 const audio = new Audio("tic-tac.mp3");
 
-const pauseSeconds = 5;
-const focusSeconds = 10;
+const pauseSeconds = 5 * 60;
+const focusSeconds = 25 * 60;
 
 const playEmoji = "▶️";
 const pauseEmoji = "⏸️";
